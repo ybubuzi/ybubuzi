@@ -181,7 +181,8 @@ function search(searchIconUrl) {
             $("#txt").val(hotValue)
         }
         if (e.keyCode === 13) {
-            window.open(searchData.thisSearch + $("#txt").val());
+            const  text = encodeURIComponent($("#txt").val())
+            window.open(searchData.thisSearch + text);
             $("#box").css("display", "none");
             $("#txt").blur();
             $("#box ul li").removeClass("current");
