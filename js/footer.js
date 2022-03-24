@@ -1,4 +1,18 @@
 
+function cookieToJson() {
+  const cookieObj = document.cookie.split(';').map((item) => item.split('=')).reduce((acc, [k, v]) => (acc[k.trim().replace('"', '')] = v) && acc, {});
+
+  return cookieObj || {}
+}
+function saveJsonToCookie(cookieObj){
+  if(cookieObj){
+    for(const key in cookieObj){
+      const value = cookieObj[key]
+      document.cookie = `${key}=${value};path=/`
+    }
+    //document.cookie = "night=0;path=/"
+  }
+}
 $(document).ready(function () {
   //img lazy loaded
   const observer = lozad();
@@ -23,11 +37,15 @@ $(document).ready(function () {
     }
   })
   $('.user-info-menu .hidden-sm').click(function () {
+    const o = cookieToJson()
     if ($('.sidebar-menu').hasClass('collapsed')) {
       $('.has-sub.expanded > ul').attr("style", "")
+      o.collapsed = 1
     } else {
       $('.has-sub.expanded > ul').show()
+      o.collapsed = 0
     }
+    saveJsonToCookie(o)
   })
   $("#main-menu li ul li").click(function () {
     $(this).siblings('li').removeClass('active'); // 删除其他兄弟元素的样式
@@ -60,22 +78,25 @@ $("a.smooth").click(function (e) {
   pos = $(href).position().top - 30;
 });
 (function () {
-  if (document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1") === '') {
-    if (new Date().getHours() > 22 || new Date().getHours() < 6) {
+  const cookieObj = cookieToJson()
+  if(cookieObj.night==='1'){
       document.body.classList.add('night');
-      document.cookie = "night=1;path=/";
       console.log('夜间模式开启');
-    } else {
+  }else{
       document.body.classList.remove('night');
-      document.cookie = "night=0;path=/";
       console.log('夜间模式关闭');
-    }
-  } else {
-    var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1") || '0';
-    if (night == '0') {
-      document.body.classList.remove('night');
-    } else if (night == '1') {
-      document.body.classList.add('night');
-    }
+  }
+  if(cookieObj.collapsed==='1'){
+    $('.sidebar-menu.toggle-others.fixed').addClass('collapsed')
+  }else{
+    $('.sidebar-menu.toggle-others.fixed').removeClass('collapsed')
   }
 })();
+
+
+/**
+sidebar-menu toggle-others fixed collapsed
+sidebar-menu toggle-others fixed
+sidebar-menu-inner ps-container ps-active-y
+sidebar-menu-inner ps-container ps-active-y
+ */

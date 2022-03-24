@@ -252,9 +252,11 @@ function switchNightMode() {
     var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1") || '0';
     if (night == '0') {
         document.body.classList.add('night');
+        document.body.classList.remove('daytime');
         document.cookie = "night=1;path=/"
     } else {
         document.body.classList.remove('night');
+        document.body.classList.add('daytime');
         document.cookie = "night=0;path=/"
     }
 }

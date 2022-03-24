@@ -314,6 +314,16 @@
   <!-- 直接添加html内容即可 -->
 <!-- 可设置多行 -->
   
+  <script>
+
+    const backgourdImage = "\"\"";
+    if(backgourdImage!=""){
+      $('body')
+      .css("background",`url('${backgourdImage}') no-repeat`)
+      .css("background-attachment","fixed")
+      .css("background-size","100%")
+    }
+  </script>
 </body>
 
 </html>
